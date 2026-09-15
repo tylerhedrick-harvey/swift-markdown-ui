@@ -13,7 +13,7 @@ import SwiftUI
 /// }
 /// .markdownImageProvider(.asset)
 /// ```
-public protocol ImageProvider {
+public protocol ImageProvider: Sendable {
   /// A view that loads and displays an image.
   associatedtype Body: View
 
@@ -23,19 +23,19 @@ public protocol ImageProvider {
   /// will call this method for each image in their contents.
   ///
   /// - Parameter url: The URL of the image to display.
-  @ViewBuilder func makeImage(url: URL?) -> Body
+  @MainActor @ViewBuilder func makeImage(url: URL?) -> Body
 }
 
 struct AnyImageProvider: ImageProvider {
-  private let _makeImage: (URL?) -> AnyView
+  private let _makeImage: @Sendable @MainActor (URL?) -> AnyView
 
   init<I: ImageProvider>(_ imageProvider: I) {
-    self._makeImage = {
-      AnyView(imageProvider.makeImage(url: $0))
+    self._makeImage = { @Sendable @MainActor url in
+      AnyView(imageProvider.makeImage(url: url))
     }
   }
 
-  func makeImage(url: URL?) -> some View {
+  @MainActor func makeImage(url: URL?) -> some View {
     self._makeImage(url)
   }
 }

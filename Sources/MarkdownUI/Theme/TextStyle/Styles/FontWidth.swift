@@ -1,7 +1,6 @@
 import SwiftUI
 
 /// A text style that adjusts the font width.
-@available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
 public struct FontWidth: TextStyle {
   private let width: Font.Width
 

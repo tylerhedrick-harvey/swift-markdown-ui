@@ -1,5 +1,5 @@
 import MarkdownUI
-import Splash
+@preconcurrency import Splash
 import SwiftUI
 
 struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter {
